@@ -19,7 +19,7 @@ namespace KleintechTestTask.Controllers
         {
             using (TestTaskDbContext testTaskDbContext = new TestTaskDbContext())
             {
-                var users = testTaskDbContext.Persons.Include(p => p.Address).Include(p => p.Spouse).Where(u => u.Id > -1);
+                var users = testTaskDbContext.Persons.Where(u => u.Id > -1);
                 return Ok(users.ToList());
             }
         }
