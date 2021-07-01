@@ -163,25 +163,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="DbContext\TestTaskDbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202106280948251_BasicsAdded.cs" />
-    <Compile Include="Migrations\202106280948251_BasicsAdded.designer.cs">
-      <DependentUpon>202106280948251_BasicsAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106281017439_Married.cs" />
-    <Compile Include="Migrations\202106281017439_Married.designer.cs">
-      <DependentUpon>202106281017439_Married.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106281101334_Edited.cs" />
-    <Compile Include="Migrations\202106281101334_Edited.designer.cs">
-      <DependentUpon>202106281101334_Edited.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\Person.cs" />
     <Compile Include="Models\ShowAge.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -238,7 +222,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Querries\" />
     <Folder Include="Views\Admin\" />
     <Folder Include="Views\Testing\" />
   </ItemGroup>
@@ -272,15 +255,18 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202106280948251_BasicsAdded.resx">
-      <DependentUpon>202106280948251_BasicsAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106281017439_Married.resx">
-      <DependentUpon>202106281017439_Married.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106281101334_Edited.resx">
-      <DependentUpon>202106281101334_Edited.cs</DependentUpon>
-    </EmbeddedResource>
+    <ProjectReference Include="..\KleintechTestTask.Core\KleintechTestTask.Core.csproj">
+      <Project>{1b565dba-cae0-41c9-a4d9-90f2868dcc73}</Project>
+      <Name>KleintechTestTask.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KleintechTestTask.Services\KleintechTestTask.Services.csproj">
+      <Project>{c8ff98b7-c8c4-485f-a897-a93819dd9e0b}</Project>
+      <Name>KleintechTestTask.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KleintectTestTask.Data\KleintectTestTask.Data.csproj">
+      <Project>{a05eeeaa-13b5-4aa2-942e-8787e35da111}</Project>
+      <Name>KleintectTestTask.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

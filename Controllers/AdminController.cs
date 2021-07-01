@@ -1,75 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using System.Web.Http.Results;
-using System.Web.Mvc;
-using KleintechTestTask.DbContext;
-using KleintechTestTask.Models;
+﻿using System.Web.Http;
+using KleintechTestTask.Core.Models;
+using KleintechTestTask.Core.Services;
 
 namespace KleintechTestTask.Controllers
 {
     public class AdminController : ApiController
     {
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("UsersList")]
+        private readonly IPersonService _personService;
+
+        public AdminController()
+        {
+
+        }
+
+        public AdminController(IPersonService personService)
+        {
+            _personService = personService;
+        }
+
+        [HttpGet]
+        [Route("UsersList")]
+        public IHttpActionResult GetUsersById(int id)
+        {
+            var person = _personService.GetFullPerson(id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+            return Ok(person);
+        }
+
+        [HttpGet]
+        [Route("UsersList")]
         public IHttpActionResult GetUsers()
         {
-            using (TestTaskDbContext testTaskDbContext = new TestTaskDbContext())
-            {
-                var users = testTaskDbContext.Persons.Where(u => u.Id > -1);
-                return Ok(users.ToList());
-            }
+            var persons = _personService.Get();
+            return Ok(persons);
         }
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("AddUser")]
+        [HttpPost]
+        [Route("AddUser")]
         public IHttpActionResult PostUsers(Person newPerson)
         {
-            using (TestTaskDbContext testTaskDbContext = new TestTaskDbContext())
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                testTaskDbContext.Persons.Add(newPerson);
-                testTaskDbContext.SaveChanges();
-                return Created("", newPerson);
-            }
+            _personService.Create(newPerson);
+            return Created("", newPerson);
         }
 
-        [System.Web.Http.HttpPut]
-        [System.Web.Http.Route("AddUser/{id1},{id2}")]
+        [HttpPut]
+        [Route("AddUser/{id1},{id2}")]
         public IHttpActionResult PutSpouse(int id1, int id2)
         {
-            using (TestTaskDbContext testTaskDbContext = new TestTaskDbContext())
+            var spouse1 = _personService.GetById(id1);
+            var spouse2 = _personService.GetById(id2);
+
+            if (spouse1.Married || spouse2.Married)
             {
-                var spouse1 = testTaskDbContext.Persons.FirstOrDefault(p => p.Id == id1);
-                var spouse2 = testTaskDbContext.Persons.FirstOrDefault(p => p.Id == id2);
-
-                if (spouse1.Married == false & spouse2.Married == false)
-                {
-                    spouse1.Spouse = spouse2;
-                    spouse2.Spouse = spouse1;
-                    spouse1.Married = true;
-                    spouse2.Married = true;
-                }
-
-                testTaskDbContext.SaveChanges();
-                return Ok();
+                return BadRequest("One of these persons are married");
             }
+
+            spouse1.Spouse = spouse2;
+            spouse2.Spouse = spouse1;
+            spouse1.Married = true;
+            spouse2.Married = true;
+            return Ok();
         }
 
-        [System.Web.Http.HttpDelete]
-        [System.Web.Http.Route("DeleteUser/{id}")]
-        public IHttpActionResult DeletePerson(int id)
-        {
-            using (TestTaskDbContext testTaskDbContext = new TestTaskDbContext())
+            [HttpDelete]
+            [Route("DeleteUser/{id}")]
+            public IHttpActionResult DeletePerson(int id)
             {
-                var person = testTaskDbContext.Persons.Include(p => p.Spouse).FirstOrDefault(p => p.Id == id);
+
+                var person = _personService.GetById(id);
 
                 if (person == null)
                 {
@@ -77,21 +78,17 @@ namespace KleintechTestTask.Controllers
                 }
 
                 var spouse = person.Spouse;
-                
+
                 if (spouse == null)
                 {
-                    testTaskDbContext.Persons.Remove(person);
-                    testTaskDbContext.SaveChanges();
+                    _personService.Delete(person);
                     return Ok();
-                }
+                } 
 
-                spouse.Spouse = null;
+                spouse.Spouse = null; 
                 person.Spouse = null;
-
-                testTaskDbContext.Persons.Remove(person);
-                testTaskDbContext.SaveChanges();
+                _personService.Delete(person);
                 return Ok();
             }
-        }
     }
 }
