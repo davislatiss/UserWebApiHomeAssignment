@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using KleintechTestTask.Core.Models;
 
 namespace KleintechTestTask.Models
 {
     public class ShowAge
     {
-        public int ReturnAge(Person person)
+        public static void ReturnAge(Person person)
         {
             var now = DateTime.Now;
             var birthDate = person.BirthDate;
@@ -16,7 +17,7 @@ namespace KleintechTestTask.Models
             if (now.Month < birthDate.Month || (now.Month == birthDate.Month && now.Day < birthDate.Day))
                 age--;
 
-            return age;
+            person.Age = age;
         }
     }
 }
