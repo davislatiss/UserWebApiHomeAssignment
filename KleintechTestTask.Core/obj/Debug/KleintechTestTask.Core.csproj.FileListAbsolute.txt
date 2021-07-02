@@ -1,0 +1,6 @@
+C:\Users\Dave\Desktop\codelex\KleintechTestTask.Core\bin\Debug\KleintechTestTask.Core.dll
+C:\Users\Dave\Desktop\codelex\KleintechTestTask.Core\bin\Debug\KleintechTestTask.Core.pdb
+C:\Users\Dave\Desktop\codelex\KleintechTestTask.Core\obj\Debug\KleintechTestTask.Core.csproj.CoreCompileInputs.cache
+C:\Users\Dave\Desktop\codelex\KleintechTestTask.Core\obj\Debug\KleintechTestTask.Core.dll
+C:\Users\Dave\Desktop\codelex\KleintechTestTask.Core\obj\Debug\KleintechTestTask.Core.pdb
+C:\Users\Dave\Desktop\codelex\KleintechTestTask.Core\obj\Debug\KleintechTestTask.Core.csprojAssemblyReference.cache
