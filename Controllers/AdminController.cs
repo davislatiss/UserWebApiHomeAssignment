@@ -1,6 +1,9 @@
-﻿using System.Web.Http;
+﻿using System.Data.Entity.Core.Metadata.Edm;
+using System.Web.Http;
 using KleintechTestTask.Core.Models;
 using KleintechTestTask.Core.Services;
+using KleintechTestTask.Models;
+using KleintectTestTask.Data;
 
 namespace KleintechTestTask.Controllers
 {
@@ -19,10 +22,11 @@ namespace KleintechTestTask.Controllers
         }
 
         [HttpGet]
-        [Route("UsersList")]
+        [Route("UsersList/{id}")]
         public IHttpActionResult GetUsersById(int id)
         {
             var person = _personService.GetFullPerson(id);
+            ShowAge.ReturnAge(person);
             if (person == null)
             {
                 return NotFound();
@@ -65,30 +69,30 @@ namespace KleintechTestTask.Controllers
             return Ok();
         }
 
-            [HttpDelete]
-            [Route("DeleteUser/{id}")]
-            public IHttpActionResult DeletePerson(int id)
+        [HttpDelete]
+        [Route("DeleteUser/{id}")]
+        public IHttpActionResult DeletePerson(int id)
+        {
+
+            var person = _personService.GetById(id);
+
+            if (person == null)
             {
+                return BadRequest();
+            }
 
-                var person = _personService.GetById(id);
+            var spouse = person.Spouse;
 
-                if (person == null)
-                {
-                    return BadRequest();
-                }
-
-                var spouse = person.Spouse;
-
-                if (spouse == null)
-                {
-                    _personService.Delete(person);
-                    return Ok();
-                } 
-
-                spouse.Spouse = null; 
-                person.Spouse = null;
+            if (spouse == null)
+            {
                 _personService.Delete(person);
                 return Ok();
+            } 
+
+            spouse.Spouse = null; 
+            person.Spouse = null;
+            _personService.Delete(person);
+            return Ok();
             }
     }
 }
